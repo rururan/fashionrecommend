@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h3>あなたの好きなブランドを入力してください</h3>
+<h3>あなたの入力したブランドと相性のいいブランドが提案されます</h3>
+
+<form method="get" action="{% url 'recommend_app:result' %}">
+    <select name="name">
+    {% for brandname in set_elementlist %}
+    <option value="{{brandname}}" label="{{brandname}}">{{ brandname }}</option>
+    {% endfor %}
+    </select>
+    
+    {% csrf_token %}
+    <input type="submit"  value="recommend!!">
+</form>
+
+
+{% endblock %}

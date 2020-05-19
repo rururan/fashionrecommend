@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>ファッショニスタに聞け！</h1>
+<h3><a href="{% url 'recommend_app:input'%}">Mens あなた好みのおすすめブランドレコメンド！</a></h3>
+<h3><a href="{% url 'recommend_app:input_women'%}">Womens あなた好みのおすすめブランドレコメンド！</a></h3>
+
+
+<h5>※読み込みに30秒近くかかると思います…</h5>
+{% endblock %}
