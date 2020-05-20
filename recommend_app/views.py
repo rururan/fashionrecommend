@@ -15,17 +15,20 @@ from . import helpers
 class IndexView(TemplateView):
     template_name="recommend_app/index.html"
 
-"""
-class InputView(TemplateView):
-    template_name="recommend_app/input.html"
-"""
-
 def input(request,*args,**kwargs):
     flag = True
     page = 1
     BrandList = []
     NameList = []
     selectlist=[]
+    
+    
+    set_menslist=request.session.get("set_menslist")
+    if set_menslist:
+        params={"set_menslist":set_menslist}
+        return render(request,"recommend_app/input.html", params)
+
+    
 
     while flag:
         URL = 'https://www.fashion-press.net/snaps/sex/mens?page=' + str(page)
@@ -47,17 +50,13 @@ def input(request,*args,**kwargs):
     df = pd.DataFrame(data=BrandList, index=NameList)  # pandasのDataFrame型に
     df.to_csv('StreetSnapMen.csv')
     # df = pd.read_csv('StreetSnapMen.csv', index_col = 0)
-    
-    """
-    brand = helpers.getuniqueList(df)
-    brand_df = pd.DataFrame(index=list(brand.keys()),data=list(brand.values()))
-    brand_df = brand_df.drop(np.nan) # NAN　を削除
-    """ 
 
     elementlist=list(helpers.flatten(selectlist))
-    set_elementlist=list(set(elementlist))
-    set_elementlist.sort()
-    params={"set_elementlist":set_elementlist}
+    set_menslist=list(set(elementlist))
+    set_menslist.sort()
+    params={"set_menslist":set_menslist}
+    request.session["set_menslist"]=set_menslist
+    request.session.set_expiry(86400)
 
     return render(request,"recommend_app/input.html", params)
 
@@ -67,6 +66,13 @@ def input_women(request,*args,**kwargs):
     BrandList = []
     NameList = []
     selectlist=[]
+
+
+    set_womenslist=request.session.get("set_womenslist")
+    if set_womenslist:
+        params={"set_womenslist":set_womenslist}
+        return render(request,"recommend_app/input_women.html", params)
+
 
     while flag:
         URL = 'https://www.fashion-press.net/snaps/sex/womens?page=' + str(page)
@@ -88,17 +94,13 @@ def input_women(request,*args,**kwargs):
     df = pd.DataFrame(data=BrandList, index=NameList)  # pandasのDataFrame型に
     df.to_csv('StreetSnapWomen.csv')
     # df = pd.read_csv('StreetSnapWomen.csv', index_col = 0)
-    
-    """
-    brand = helpers.getuniqueList(df)
-    brand_df = pd.DataFrame(index=list(brand.keys()),data=list(brand.values()))
-    brand_df = brand_df.drop(np.nan) # NAN　を削除
-    """ 
 
     elementlist=list(helpers.flatten(selectlist))
-    set_elementlist=list(set(elementlist))
-    set_elementlist.sort()
-    params={"set_elementlist":set_elementlist}
+    set_womenslist=list(set(elementlist))
+    set_womenslist.sort()
+    params={"set_womenslist":set_womenslist}
+    request.session["set_womenslist"]=set_womenslist
+    request.session.set_expiry(86400)
 
     return render(request,"recommend_app/input_women.html", params) 
     

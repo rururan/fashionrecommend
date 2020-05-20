@@ -6,7 +6,7 @@
 
 <form method="get" action="{% url 'recommend_app:result' %}">
     <select name="name">
-    {% for brandname in set_elementlist %}
+    {% for brandname in set_menslist %}
     <option value="{{brandname}}" label="{{brandname}}">{{ brandname }}</option>
     {% endfor %}
     </select>
