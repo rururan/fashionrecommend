@@ -1,16 +1,10 @@
-"""
-WSGI config for fashion_app project.
-
-It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/3.0/howto/deployment/wsgi/
-"""
-
 import os
-
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fashion_app.settings')
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myapp7.settings')👈myapp7は自分のアプリ名に変更
 
 application = get_wsgi_application()
+
+from whitenoise.django import DjangoWhiteNoise
+application = DjangoWhiteNoise(application)

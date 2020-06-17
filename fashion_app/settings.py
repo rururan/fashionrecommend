@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,12 +19,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 
+SECRET_KEY = 'ck7)q3=yi@qt8^#50x=a8q3e1nuz!b=5890t!9*yyh$pinypqc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,6 +41,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -70,17 +70,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fashion_app.wsgi.application'
 
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES = {
+    'default': dj_database_url.config()
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -122,3 +129,56 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'fashion_app/static')
+
+from socket import gethostname
+hostname = gethostname()
+
+if "masa" in hostname:
+    # デバッグ環境
+    DEBUG = True
+#=====ここから...=====
+    import pymysql
+    pymysql.install_as_MySQLdb()
+
+    DATABASES = {
+        'default': {
+            #'ENGINE': 'django.db.backends.sqlite3',
+            #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+             "ENGINE": "django.db.backends.mysql",
+             "NAME": "sample",
+             "USER": "root",
+             "PASSWORD": "root",
+             "HOST": "127.0.0.1",
+             "PORT": "3306",
+        }
+    }
+#=====...ここまでは、使用しているデータベースに置き換えてください。=====
+    ALLOWED_HOSTS = ["*"]
+else:
+    # 本番環境
+    DEBUG = True
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            },
+        },
+    }
+
+    # DB設定
+    import dj_database_url
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    db_from_env = dj_database_url.config()
+    DATABASES = {
+        'default': dj_database_url.config()
+    }
+    ALLOWED_HOSTS = ['*']
