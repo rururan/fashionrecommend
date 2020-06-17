@@ -1,1 +1,1 @@
-web: gunicorn myapp7.wsgi --log-file -
+web: gunicorn fashion_app.wsgi --log-file -

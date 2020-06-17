@@ -19,10 +19,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ck7)q3=yi@qt8^#50x=a8q3e1nuz!b=5890t!9*yyh$pinypqc'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
+
+if not DEBUG:
+    SECRET_KEY = os.environ['SECRET_KEY']
+    import django_heroku
+    django_heroku.settings(locals())
+    
 
 ALLOWED_HOSTS = ["*"]
 
@@ -80,14 +91,23 @@ DATABASES = {
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-"""
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "sample",
+        "USER": "masa",
+        "PASSWORD": "masa",
+        "HOST": "127.0.0.1",
+        "PORT": "3306",
     }
 }
-"""
+
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -131,6 +151,17 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'fashion_app/static')
 
+
+
+
+
+
+
+
+
+
+
+"""
 from socket import gethostname
 hostname = gethostname()
 
@@ -145,16 +176,16 @@ if "masa" in hostname:
         'default': {
             #'ENGINE': 'django.db.backends.sqlite3',
             #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-             "ENGINE": "django.db.backends.mysql",
-             "NAME": "sample",
-             "USER": "root",
-             "PASSWORD": "root",
-             "HOST": "127.0.0.1",
-             "PORT": "3306",
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "sample",
+            "USER": "masa",
+            "PASSWORD": "masa",
+            "HOST": "127.0.0.1",
+            "PORT": "3306",
         }
     }
 #=====...ここまでは、使用しているデータベースに置き換えてください。=====
-    ALLOWED_HOSTS = ["*"]
+    ALLOWED_HOSTS = []
 else:
     # 本番環境
     DEBUG = True
@@ -182,3 +213,5 @@ else:
         'default': dj_database_url.config()
     }
     ALLOWED_HOSTS = ['*']
+
+"""
