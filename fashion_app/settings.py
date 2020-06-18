@@ -144,7 +144,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'fashion_app/static')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
+#下記のコードは最下段に置かなければいけない
 DEBUG = False
 
 try:
