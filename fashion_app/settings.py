@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'fashion_app.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 
-
+"""
 DATABASES = {
     'default': {
         #'ENGINE': 'django.db.backends.sqlite3',
@@ -88,15 +88,11 @@ DATABASES = {
         "PORT": "3306",
     }
 }
+"""
 
 import dj_database_url
 
-"""
-db_from_env = dj_database_url.config()
-DATABASES = {
-    'default': dj_database_url.config()
-}
-"""
+
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 #conn_max_age=600, ssl_require=True
