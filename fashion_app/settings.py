@@ -75,27 +75,27 @@ WSGI_APPLICATION = 'fashion_app.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 
-"""
+
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "sample",
-        "USER": "masa",
-        "PASSWORD": "masa",
-        "HOST": "127.0.0.1",
-        "PORT": "3306",
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #"ENGINE": "django.db.backends.mysql",
+        #"NAME": "sample",
+        #"USER": "masa",
+        #"PASSWORD": "masa",
+        #"HOST": "127.0.0.1",
+        #"PORT": "3306"
+        }
     }
-}
+
+
 """
-
 import dj_database_url
-
-
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 #conn_max_age=600, ssl_require=True
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -137,12 +137,18 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'fashion_app/static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'fashion_app/static')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 #下記のコードは最下段に置かなければいけない
-DEBUG = False
 
+import dj_database_url
+DATABASES['default'] = dj_database_url.config()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+ALLOWED_HOSTS = ['*']
+STATIC_ROOT = 'staticfiles'
+
+DEBUG = False
 try:
     from .local_settings import *
 except ImportError:
@@ -153,62 +159,3 @@ if not DEBUG:
     import django_heroku
     django_heroku.settings(locals())
 
-
-
-
-
-
-"""
-from socket import gethostname
-hostname = gethostname()
-
-if "masa" in hostname:
-    # デバッグ環境
-    DEBUG = True
-#=====ここから...=====
-    import pymysql
-    pymysql.install_as_MySQLdb()
-
-    DATABASES = {
-        'default': {
-            #'ENGINE': 'django.db.backends.sqlite3',
-            #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": "sample",
-            "USER": "masa",
-            "PASSWORD": "masa",
-            "HOST": "127.0.0.1",
-            "PORT": "3306",
-        }
-    }
-#=====...ここまでは、使用しているデータベースに置き換えてください。=====
-    ALLOWED_HOSTS = []
-else:
-    # 本番環境
-    DEBUG = True
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-            },
-        },
-        'loggers': {
-            'django': {
-                'handlers': ['console'],
-                'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-            },
-        },
-    }
-
-    # DB設定
-    import dj_database_url
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    db_from_env = dj_database_url.config()
-    DATABASES = {
-        'default': dj_database_url.config()
-    }
-    ALLOWED_HOSTS = ['*']
-
-"""
