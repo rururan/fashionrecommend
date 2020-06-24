@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "recommend_app"
+    "recommend_app",
 ]
 
 MIDDLEWARE = [

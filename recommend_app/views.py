@@ -14,95 +14,32 @@ from . import helpers
 
 class IndexView(TemplateView):
     template_name="recommend_app/index.html"
+    
 
 def input(request,*args,**kwargs):
-    flag = True
-    page = 1
-    BrandList = []
-    NameList = []
-    selectlist=[]
     
-    
-    set_menslist=request.session.get("set_menslist")
-    if set_menslist:
-        params={"set_menslist":set_menslist}
-        return render(request,"recommend_app/input.html", params)
+    with open("selectmenslist.csv","r") as f:
+        for line in f:
+            line = line.rstrip()
+            set_menslist = line.split(",")
 
-    
-
-    while flag:
-        URL = 'https://www.fashion-press.net/snaps/sex/mens?page=' + str(page)
-        soup = helpers.openURL(URL)
-        snaps = soup.find_all('div',attrs={'class': 'fp_media_tile snap_media col_3'})
-
-        if len(snaps) != 0:  # 写真がある場合はブランドを取得
-            tmpBrandList = helpers.getBrandList(snaps)
-            BrandList.extend(tmpBrandList)
-            selectlist.extend(helpers.getselectlist(snaps))
-            NameList.extend(helpers.getNameList(snaps))
-            # print('get page' + str(page))
-            page += 1
-
-        else:  # 写真がない場合は終了
-            flag = False
-            # print('END')
-
-    df = pd.DataFrame(data=BrandList, index=NameList)  # pandasのDataFrame型に
-    df.to_csv('StreetSnapMen.csv')
-    # df = pd.read_csv('StreetSnapMen.csv', index_col = 0)
-
-    elementlist=list(helpers.flatten(selectlist))
-    set_menslist=list(set(elementlist))
-    set_menslist.sort()
+    #csvブランドリストをlist化する
     params={"set_menslist":set_menslist}
-    request.session["set_menslist"]=set_menslist
-    request.session.set_expiry(86400)
-
     return render(request,"recommend_app/input.html", params)
 
+
 def input_women(request,*args,**kwargs):
-    flag = True
-    page = 1
-    BrandList = []
-    NameList = []
-    selectlist=[]
 
+    with open("selectwomenslist.csv","r") as f:
+        for line in f:
+            line = line.rstrip()
+            set_womenslist = line.split(",")
 
-    set_womenslist=request.session.get("set_womenslist")
-    if set_womenslist:
-        params={"set_womenslist":set_womenslist}
-        return render(request,"recommend_app/input_women.html", params)
-
-
-    while flag:
-        URL = 'https://www.fashion-press.net/snaps/sex/womens?page=' + str(page)
-        soup = helpers.openURL(URL)
-        snaps = soup.find_all('div',attrs={'class': 'fp_media_tile snap_media col_3'})
-
-        if len(snaps) != 0:  # 写真がある場合はブランドを取得
-            tmpBrandList = helpers.getBrandList(snaps)
-            BrandList.extend(tmpBrandList)
-            selectlist.extend(helpers.getselectlist(snaps))
-            NameList.extend(helpers.getNameList(snaps))
-            # print('get page' + str(page))
-            page += 1
-
-        else:  # 写真がない場合は終了
-            flag = False
-            # print('END')
-
-    df = pd.DataFrame(data=BrandList, index=NameList)  # pandasのDataFrame型に
-    df.to_csv('StreetSnapWomen.csv')
-    # df = pd.read_csv('StreetSnapWomen.csv', index_col = 0)
-
-    elementlist=list(helpers.flatten(selectlist))
-    set_womenslist=list(set(elementlist))
-    set_womenslist.sort()
+    #csvブランドリストをlist化する
     params={"set_womenslist":set_womenslist}
-    request.session["set_womenslist"]=set_womenslist
-    request.session.set_expiry(86400)
+    return render(request,"recommend_app/input_women.html", params)
 
-    return render(request,"recommend_app/input_women.html", params) 
+
     
 def result(request,*args,**kwargs):
     if request.method=="GET":
