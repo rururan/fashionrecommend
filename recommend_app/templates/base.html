@@ -7,13 +7,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>fashionrecommend</title>
-  <meta name="description" content="ページの内容を表す文章" />
+  <meta name="description" content="あなたに似合うファッションブランドをご提案します" />
 
 </head>
 
 <body>
   <header>
-    <p><a href="{% url 'recommend_app:index' %}">トップページ</a></p>
+    <ul>
+      <li><a href="{% url 'recommend_app:index' %}">トップページ</a></li>
+      <li><a href="{% url 'recommend_app:about' %}">概要</li>
+    </ul>
   </header> 
 
   <div class="container">
