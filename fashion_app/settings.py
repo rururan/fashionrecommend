@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "recommend_app",
+    'bootstrap4',
+    'sass_processor',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +65,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            'builtins':[ 
+                'bootstrap4.templatetags.bootstrap4',
             ],
         },
     },
@@ -122,6 +127,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+# Sass/SCSS
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
+SASS_PROCESSOR_INCLUDE_FILE_PATTERN = r'^.+\.(sass|scss)$'
+SASS_PRECISION = 8
+SASS_OUTPUT_STYLE = 'compressed'
+SASS_TEMPLATE_EXTS = ['.html', '.haml']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
