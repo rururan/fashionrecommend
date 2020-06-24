@@ -14,7 +14,11 @@ from . import helpers
 
 class IndexView(TemplateView):
     template_name="recommend_app/index.html"
-    
+
+def about(request):
+    return render(request,"recommend_app/about.html")
+
+
 
 def input(request,*args,**kwargs):
     
